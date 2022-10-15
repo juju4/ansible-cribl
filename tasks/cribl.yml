@@ -4,7 +4,7 @@
   ansible.builtin.file:
     dest: "{{ item }}"
     state: directory
-    mode: '0700'
+    mode: '0755'
     owner: "{{ cribl_user }}"
   loop:
     - "{{ cribl_home }}"
