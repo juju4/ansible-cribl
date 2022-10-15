@@ -23,7 +23,7 @@
   become_user: root
 
 - name: Install dependencies
-  package:
+  ansible.builtin.package:
     name: "{{ cribl_deps }}"
     state: present
 
