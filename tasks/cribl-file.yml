@@ -1,0 +1,8 @@
+---
+
+- name: Copy Cribl from orchestrator
+  ansible.builtin.copy:
+    src: "{{ cribl_filepath }}"
+    dest: "{{ install_archives }}/cribl.tgz"
+    mode: '0600'
+    owner: "{{ cribl_user }}"

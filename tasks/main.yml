@@ -1,0 +1,65 @@
+---
+
+- name: Include specific variables per other os family
+  ansible.builtin.include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Set fact is_container
+  ansible.builtin.set_fact:
+    is_container: true
+  when: >
+    (ansible_virtualization_type is defined and
+      (ansible_virtualization_type == "docker"
+       or ansible_virtualization_type == "containerd"
+       or ansible_virtualization_type == "container"
+      )
+    )
+
+- name: Ensure archives folder exists
+  ansible.builtin.file:
+    dest: "{{ install_archives }}"
+    state: directory
+    mode: '0775'
+  become: yes
+  become_user: root
+
+- name: Install dependencies
+  package:
+    name: "{{ cribl_deps }}"
+    state: present
+
+- name: Ensure cribl user exists
+  ansible.builtin.user:
+    name: "{{ cribl_user }}"
+    home: "{{ cribl_userhome }}"
+    system: true
+    create_home: no
+  become: yes
+  become_user: root
+
+- name: Grant user access to archives
+  ansible.posix.acl:
+    path: "{{ install_archives }}"
+    entity: "{{ cribl_user }}"
+    etype: user
+    permissions: rwx
+    state: present
+  become: yes
+  become_user: root
+
+- name: Import cribl-url
+  ansible.builtin.import_tasks: cribl-url.yml
+  when: cribl_from == 'url'
+
+- name: Import cribl-file
+  ansible.builtin.import_tasks: cribl-file.yml
+  when: cribl_from == 'file'
+
+- name: Import cribl
+  ansible.builtin.import_tasks: cribl.yml
+
+- name: Import systemd
+  ansible.builtin.import_tasks: systemd.yml
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool

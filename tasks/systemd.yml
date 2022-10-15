@@ -1,0 +1,26 @@
+---
+
+- name: Ensure systemd is present
+  ansible.builtin.package:
+    name: systemd
+    state: present
+
+- name: Configure cribl systemd unit
+  ansible.builtin.template:
+    src: "systemd-cribl.service.j2"
+    dest: "/etc/systemd/system/cribl.service"
+    mode: '0644'
+  notify:
+    - Reload systemd
+    - Restart Cribl
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Enable and start cribl service
+  ansible.builtin.service:
+    name: cribl
+    state: started
+    enabled: yes
+  when:
+    - not is_container|bool

@@ -1,0 +1,49 @@
+---
+{{ ansible_managed | comment }}
+#
+# Example pipeline inspired from docs
+# https://docs.cribl.io/stream/usecase-sampling
+#
+output: default
+streamtags: []
+groups: {}
+asyncFuncTimeout: 1000
+functions:
+  - id: dynamic_sampling
+    filter: "true"
+    disabled: null
+    conf:
+      mode: log
+      keyExpr: "`${host}`"
+      samplePeriod: 30
+      minEvents: 30
+      maxSampleRate: 100
+  - id: regex_extract
+    filter: sourcetype=='access_combined'
+    disabled: null
+    conf:
+      source: _raw
+      iterations: 100
+      overwrite: false
+      regex: /"\s(?<__status>\d+)/
+    description: Extract status from access logs
+  - id: sampling
+    filter: sourcetype=='access_combined'
+    disabled: null
+    conf:
+      rules:
+        - filter: __status == 200
+          rate: 5
+    description: Check for status 200 and sample 5:1
+  - id: mask
+    filter: "true"
+    disabled: null
+    conf:
+      rules:
+        - matchRegex: /password=(.*?)/
+          replaceExpr: MASKED_PASSWORD
+      fields:
+        - _raw
+      depth: 5
+    description: Mask secret pattern
+description: test

@@ -1,0 +1,65 @@
+---
+
+- name: Ensure cribl home and subdirectories exist
+  ansible.builtin.file:
+    dest: "{{ item }}"
+    state: directory
+    mode: '0700'
+    owner: "{{ cribl_user }}"
+  loop:
+    - "{{ cribl_home }}"
+    - "{{ cribl_home }}/local/cribl/auth"
+    - "{{ cribl_home }}/local/cribl/pipelines"
+
+- name: Unarchive Cribl
+  ansible.builtin.unarchive:
+    src: "{{ install_archives }}/cribl.tgz"
+    dest: "{{ cribl_home }}"
+    # FIXME! need mode preserve archive or at least file+dirs
+    mode: '0755'
+    remote_src: true
+    extra_opts: --strip-components=1
+    creates: "{{ cribl_home }}/bin/cribl"
+  become: true
+  become_user: "{{ cribl_user }}"
+
+- name: Configure inputs
+  ansible.builtin.template:
+    src: "{{ cribl_inputs_template }}.j2"
+    dest: "{{ cribl_home }}/local/cribl/inputs.yml"
+    mode: '0600'
+    owner: "{{ cribl_user }}"
+  notify:
+    - Restart Cribl
+
+- name: Ensure pipelines directories exists
+  ansible.builtin.file:
+    path: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}"
+    state: directory
+    mode: '0755'
+    owner: "{{ cribl_user }}"
+  loop: "{{ cribl_pipelines_templates }}"
+
+- name: Configure pipelines
+  ansible.builtin.template:
+    src: "{{ item.template }}.j2"
+    dest: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}/conf.yml"
+    mode: '0644'
+    owner: "{{ cribl_user }}"
+  loop: "{{ cribl_pipelines_templates }}"
+  notify:
+    - Restart Cribl
+
+# this must be after cribl starts else interfering with authentication
+# and likely leave default admin as is
+- name: Configure users
+  ansible.builtin.template:
+    src: users.json.j2
+    dest: "{{ cribl_home }}/local/cribl/auth/users.json"
+    mode: '0600'
+    owner: "{{ cribl_user }}"
+  when: false
+
+# registration information from first login
+# /opt/cribl/local/cribl/auth/*.dat
+# /opt/cribl/local/cribl/auth/cribl.secret

@@ -1,0 +1,37 @@
+---
+
+cribl_from: 'url'
+cribl_url: 'https://cdn.cribl.io/dl/3.5.3/cribl-3.5.3-08986e05-linux-x64.tgz'
+cribl_hash_url: 'https://cdn.cribl.io/dl/3.5.3/cribl-3.5.3-08986e05-linux-x64.tgz.sha256'
+# cribl_from: 'file'  # from orchestrator
+cribl_filepath: ''
+
+cribl_user: _cribl
+cribl_userhome: /var/empty
+cribl_home: "/opt/cribl"
+
+cribl_wep_proxy: ''
+
+cribl_inputs_template: inputs.yml
+cribl_pipelines_templates:
+  - name: slicendice
+    template: slicendice-conf.yml
+
+# Example. To store in vault. Cribl will hash password on first read of users.json.
+# Currently not used
+cribl_users:
+  - username: admin
+    first: admin
+    last: admin
+    email: admin
+    roles: admin
+    passwd: admin
+  - username: john
+    first: john
+    last: doe
+    email: john@example.com
+    roles: user
+    passwd: john
+
+install_archives: /var/_install
+is_container: false

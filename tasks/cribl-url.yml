@@ -1,0 +1,24 @@
+---
+
+- name: Fetch Cribl hash
+  ansible.builtin.uri:
+    url: "{{ cribl_hash_url }}"
+    return_content: yes
+  register: hash
+  changed_when: false
+  until: hash is success
+
+- name: Set hash
+  ansible.builtin.set_fact:
+    cribl_hash: "sha256:{{ hash.content.split(' ')[0] }}"
+  when: hash.stdout is defined and (cribl_hash is not defined or not cribl_hash)
+
+- name: Fetch Cribl archive
+  ansible.builtin.get_url:
+    url: "{{ cribl_url }}"
+    dest: "{{ install_archives }}/cribl.tgz"
+    mode: '0600'
+    owner: "{{ cribl_user }}"
+    checksum: "{{ cribl_hash | default(omit) }}"
+  register: dl_result
+  until: dl_result is success

@@ -1,0 +1,70 @@
+{{ ansible_managed | comment }}
+inputs:
+{# elastic API source #}
+  in_elastic:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    host: 0.0.0.0
+    tls:
+      disabled: true
+    maxActiveReq: 256
+    enableProxyHeader: false
+    captureHeaders: false
+    activityLogSampleRate: 100
+    requestTimeout: 0
+    elasticAPI: /
+    authType: none
+    apiVersion: custom
+    extraHttpHeaders:
+      - name: X-elastic-product
+        value: Elasticsearch
+    proxyMode:
+      enabled: false
+    customAPIVersion: |-
+      {
+          "name": "AzU84iL",
+          "cluster_name": "cribl",
+          "cluster_uuid": "Js6_Z2VKS3KbfRSxPmPbaw",
+          "version": {
+{# cribl server version MUST align with beat client version #}
+              "number": "8.4.3",
+              "build_type": "tar",
+              "build_hash": "bca0c8d",
+              "build_date": "2019-10-16T06:19:49.319352Z",
+              "build_snapshot": false,
+              "lucene_version": "9.7.2",
+              "minimum_wire_compatibility_version": "7.17.0",
+              "minimum_index_compatibility_version": "7.0.0"
+          },
+          "tagline": "You Know, for Search"
+      }
+    type: elastic
+    port: 9200
+    splunkHecAPI: ""
+{# raw http source #}
+  testdisp:
+    disabled: false
+    sendToRoutes: false
+    pqEnabled: false
+    streamtags: []
+    host: 0.0.0.0
+    tls:
+      disabled: true
+    maxActiveReq: 256
+    enableProxyHeader: false
+    captureHeaders: false
+    activityLogSampleRate: 100
+    requestTimeout: 0
+    staleChannelFlushMs: 10000
+    allowedPaths:
+      - "*"
+    allowedMethods:
+      - "*"
+    type: http_raw
+    port: 10081
+    authTokens: []
+    connections:
+      - output: default
+    splunkHecAPI: ""

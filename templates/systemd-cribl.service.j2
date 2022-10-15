@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+# from $CRIBLE_HOME/bin/cribl.service.template
+# https://docs.cribl.io/stream/deploy-single-instance/#systemd-boot
+[Unit]
+Description=Systemd service file for Cribl Stream.
+After=network.target
+
+[Service]
+Type=forking
+User={{ cribl_user }}
+Restart=always
+RestartSec=5
+LimitNOFILE=65536
+PIDFile={{ cribl_home }}/pid/cribl.pid
+ExecStart={{ cribl_home }}/bin/cribl start
+ExecStop={{ cribl_home }}/bin/cribl stop
+ExecReload={{ cribl_home }}/bin/cribl reload
+TimeoutSec=60
+Environment=CRIBL_SERVICE=1
+Environment=CRIBL_SERVICE_NAME=${SERVICE}
+{% if cribl_web_proxy|string %}
+Environment=http_proxy={{ cribl_web_proxy }}
+Environment=https_proxy={{ cribl_web_proxy }}
+Environment=no_proxy=<no_proxy_list>
+{% endif %}
+
+[Install]
+WantedBy=multi-user.target

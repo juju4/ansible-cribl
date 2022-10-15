@@ -1,0 +1,22 @@
+---
+galaxy_info:
+  role_name: cribl
+  author: juju4
+  description: Setup cribl.io
+  license: BSD
+  min_ansible_version: '1.9'
+  standalone: true
+  platforms:
+    - name: EL
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - jammy
+        - focal
+  galaxy_tags:
+    - system
+    - logging
+    - filtering
+    - sampling
+dependencies: []

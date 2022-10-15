@@ -1,0 +1,16 @@
+---
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: yes
+  become_user: root
+  when:
+    - not is_container|bool
+
+- name: Restart Cribl
+  ansible.builtin.service:
+    name: cribl
+    state: restarted
+  when:
+    - not is_container|bool
