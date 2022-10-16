@@ -16,6 +16,10 @@ cribl_inputs_template: inputs.yml
 cribl_pipelines_templates:
   - name: slicendice
     template: slicendice-conf.yml
+    # when dest is not specified, will go to pipeline/NAME/conf.yml
+  - name: route
+    template: route.yml
+    dest: route.yml
 
 # Example. To store in vault. Cribl will hash password on first read of users.json.
 # Leave default admin account as is

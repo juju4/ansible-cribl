@@ -44,7 +44,7 @@
 - name: Configure pipelines
   ansible.builtin.template:
     src: "{{ item.template }}.j2"
-    dest: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}/conf.yml"
+    dest: "{{ cribl_home }}/local/cribl/pipelines/{{ item.dest | default(item.name + '/conf.yml') }}"
     mode: '0644'
     owner: "{{ cribl_user }}"
     backup: "{{ cribl_backup | default('no') }}"
