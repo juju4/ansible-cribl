@@ -92,6 +92,8 @@
       ansible.builtin.shell: |
         set -o pipefail
         grep -riE 'error|warning' /opt/cribl/log/cribl.log | grep -v 'startup resource check - seems good, no warnings'
+      args:
+        executable: /bin/bash
       register: log2
       changed_when: false
       failed_when: false
