@@ -29,6 +29,7 @@
     dest: "{{ cribl_home }}/local/cribl/inputs.yml"
     mode: '0600'
     owner: "{{ cribl_user }}"
+    backup: "{{ cribl_backup | default('no') }}"
   notify:
     - Restart Cribl
 
@@ -46,20 +47,18 @@
     dest: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}/conf.yml"
     mode: '0644'
     owner: "{{ cribl_user }}"
+    backup: "{{ cribl_backup | default('no') }}"
   loop: "{{ cribl_pipelines_templates }}"
   notify:
     - Restart Cribl
 
-# this must be after cribl starts else interfering with authentication
-# and likely leave default admin as is
-- name: Configure users
-  ansible.builtin.template:
-    src: users.json.j2
-    dest: "{{ cribl_home }}/local/cribl/auth/users.json"
-    mode: '0600'
-    owner: "{{ cribl_user }}"
-  when: false
-
-# registration information from first login
-# /opt/cribl/local/cribl/auth/*.dat
-# /opt/cribl/local/cribl/auth/cribl.secret
+# https://docs.cribl.io/stream/version-control/
+- name: Configure Cribl gitignore
+  ansible.builtin.lineinfile:
+    path: "{{ cribl_home }}/.gitignore"
+    line: "{{ item }}"
+  loop:
+    # ansible backup files
+    - '*.*-*-*@*:*:*~'
+  notify:
+    - Restart Cribl
