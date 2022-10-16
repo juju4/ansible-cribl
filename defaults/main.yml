@@ -10,7 +10,7 @@ cribl_user: _cribl
 cribl_userhome: /var/empty
 cribl_home: "/opt/cribl"
 
-cribl_wep_proxy: ''
+cribl_web_proxy: ''
 
 cribl_inputs_template: inputs.yml
 cribl_pipelines_templates:
