@@ -51,14 +51,3 @@
   loop: "{{ cribl_pipelines_templates }}"
   notify:
     - Restart Cribl
-
-# https://docs.cribl.io/stream/version-control/
-- name: Configure Cribl gitignore
-  ansible.builtin.lineinfile:
-    path: "{{ cribl_home }}/.gitignore"
-    line: "{{ item }}"
-  loop:
-    # ansible backup files
-    - '*.*-*-*@*:*:*~'
-  notify:
-    - Restart Cribl
