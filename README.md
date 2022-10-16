@@ -43,6 +43,7 @@ cribl_user: _cribl
 cribl_userhome: /var/empty
 cribl_home: "/opt/cribl"
 
+# If not empty, will be use to restrict service communication with systemd
 cribl_wep_proxy: ''
 
 cribl_inputs_template: inputs.yml
@@ -50,13 +51,8 @@ cribl_pipelines_templates:
   - name: slicendice
     template: slicendice-conf.yml
 # Example. To store in vault. Cribl will hash password on first read of users.json.
+# Exclude default admin user
 cribl_users:
-  - username: admin
-    first: admin
-    last: admin
-    email: admin
-    roles: admin
-    passwd: admin
   - username: john
     first: john
     last: doe
@@ -79,7 +75,7 @@ $ MOLECULE_DISTRO=ubuntu:20.04 molecule test --destroy=never
 
 ## Troubleshooting & Known issues
 
-TBD
+* For cribl users, the creation works but not the initial password which has to be reset from Web UI.
 
 ## License
 

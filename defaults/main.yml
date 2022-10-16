@@ -18,14 +18,8 @@ cribl_pipelines_templates:
     template: slicendice-conf.yml
 
 # Example. To store in vault. Cribl will hash password on first read of users.json.
-# Currently not used
+# Leave default admin account as is
 cribl_users:
-  - username: admin
-    first: admin
-    last: admin
-    email: admin
-    roles: admin
-    passwd: admin
   - username: john
     first: john
     last: doe

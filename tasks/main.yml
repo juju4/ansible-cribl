@@ -63,3 +63,6 @@
   become_user: root
   when:
     - not is_container|bool
+
+- name: Import cribl-poststart
+  ansible.builtin.import_tasks: cribl-poststart.yml
