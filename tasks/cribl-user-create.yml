@@ -1,0 +1,25 @@
+---
+
+- name: Create cribl user
+  ansible.builtin.uri:
+    url: http://localhost:9000/system/users
+    method: POST
+    headers:
+      Content-Type: application/json
+    body_format: json
+    body:
+      {
+          "currentPassword": "{{ user.passwd }}",
+          "disabled": false,
+          "email": "{{ user.email }}",
+          "first": "{{ user.first }}",
+          "id": "{{ lookup('community.general.random_string', length=12) }}",
+          "last": "{{ user.last }}",
+          "password": "{{ user.passwd }}",
+          "roles": [
+            "{{ user.roles }}"
+          ],
+          "username": "user.username"
+       }
+    return_content: yes
+  register: users

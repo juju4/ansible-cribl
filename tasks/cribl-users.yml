@@ -1,0 +1,13 @@
+---
+
+- name: Retrieve cribl users
+  ansible.builtin.uri:
+    url: http://localhost:9000/system/users
+    return_content: yes
+  register: users
+
+- ansible.builtin.include_tasks: cribl-user-create.yml
+  vars:
+    user: "{{ item }}"
+  when: "item.name not in users.stdout"
+  loop: "{{ cribl_users }}"

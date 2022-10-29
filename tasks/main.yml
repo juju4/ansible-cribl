@@ -57,6 +57,9 @@
 - name: Import cribl
   ansible.builtin.import_tasks: cribl.yml
 
+- name: Import cribl-users
+  ansible.builtin.import_tasks: cribl-users.yml
+
 - name: Import systemd
   ansible.builtin.import_tasks: systemd.yml
   become: yes
