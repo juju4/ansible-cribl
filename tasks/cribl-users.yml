@@ -10,5 +10,7 @@
   ansible.builtin.include_tasks: cribl-user-create.yml
   vars:
     user: "{{ item }}"
-  when: "item.name not in users.stdout"
+  when:
+    - users.content is defined
+    - "item.name not in users.content"
   loop: "{{ cribl_users }}"
