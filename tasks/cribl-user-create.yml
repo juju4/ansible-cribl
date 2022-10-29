@@ -9,17 +9,17 @@
     body_format: json
     body:
       {
-          "currentPassword": "{{ user.passwd }}",
-          "disabled": false,
-          "email": "{{ user.email }}",
-          "first": "{{ user.first }}",
-          "id": "{{ lookup('community.general.random_string', length=12) }}",
-          "last": "{{ user.last }}",
-          "password": "{{ user.passwd }}",
-          "roles": [
-            "{{ user.roles }}"
-          ],
-          "username": "user.username"
-       }
+        "currentPassword": "{{ user.passwd }}",
+        "disabled": false,
+        "email": "{{ user.email }}",
+        "first": "{{ user.first }}",
+        "id": "{{ lookup('community.general.random_string', length=12) }}",
+        "last": "{{ user.last }}",
+        "password": "{{ user.passwd }}",
+        "roles": [
+          "{{ user.roles }}"
+        ],
+        "username": "user.username"
+      }
     return_content: yes
   register: users
