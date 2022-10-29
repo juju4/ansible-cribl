@@ -2,23 +2,24 @@
 
 - name: Create cribl user
   ansible.builtin.uri:
-    url: http://localhost:9000/system/users
+    url: "{{ cribl_api_base }}/system/users"
     method: POST
     headers:
-      Content-Type: application/json
+      Accept: application/json
+      Authorization: "Bearer {{ token }}"
     body_format: json
+    # "id": "{{ lookup('community.general.random_string', length=12) }}",
     body:
       {
-        "currentPassword": "{{ user.passwd }}",
         "disabled": false,
+        "id": "{{ user.username }}",
+        "username": "{{ user.username }}",
         "email": "{{ user.email }}",
         "first": "{{ user.first }}",
-        "id": "{{ lookup('community.general.random_string', length=12) }}",
         "last": "{{ user.last }}",
         "password": "{{ user.passwd }}",
         "roles": [
           "{{ user.roles }}"
         ],
-        "username": "{{ user.username }}"
       }
     return_content: yes
