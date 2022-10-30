@@ -52,12 +52,19 @@
   notify:
     - Restart Cribl
 
-- name: Restore license file
-  ansible.builtin.copy:
-    src: "{{ cribl_license_dat }}"
-    dest: "{{ cribl_home }}/local/cribl/auth/676f6174733432.dat"
-    mode: 0644
-    backup: "{{ cribl_backup | default('no') }}"
-  notify:
-    - Restart Cribl
+- name: Cribl license file
   when: cribl_license_dat|string
+  block:
+    - name: Stat license file
+      ansible.builtin.stat:
+        path: "{{ cribl_home }}/local/cribl/auth/676f6174733432.dat"
+      register: lic
+    - name: Restore license file
+      ansible.builtin.copy:
+        src: "{{ cribl_license_dat }}"
+        dest: "{{ cribl_home }}/local/cribl/auth/676f6174733432.dat"
+        mode: 0644
+        backup: "{{ cribl_backup | default('no') }}"
+      notify:
+        - Restart Cribl
+      when: not lic.stat.exists
