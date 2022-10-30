@@ -21,6 +21,9 @@ cribl_pipelines_templates:
     template: route.yml
     dest: route.yml
 
+cribl_license_dat: ''
+# cribl_license_dat: /opt/cribl/local/cribl/auth/676f6174733432.dat
+
 # Example. To store in vault. Cribl will hash password on first read of users.json.
 # Leave default admin account as is
 # password must be 8 characters or more
