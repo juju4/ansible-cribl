@@ -24,9 +24,7 @@
     executable: /bin/bash
   register: uri_token
   changed_when: false
-
-- debug:
-    var: uri_token.stdout
+  failed_when: "'null' in uri_token.stdout"
 
 - name: Retrieve cribl users
   ansible.builtin.uri:

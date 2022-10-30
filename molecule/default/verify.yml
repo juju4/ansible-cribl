@@ -9,6 +9,9 @@
     ports:
       # cribl default web ui
       - { h: 0.0.0.0, p: 9000 }
+    verify_users:
+      - john
+      - jane
     url: http://localhost:9000
     is_container: false
   pre_tasks:
@@ -102,3 +105,10 @@
         that: log2.rc != 0
       when:
         - not is_container|bool
+
+    - name: Check users are present
+      ansible.builtin.command: >
+        grep '"username":"{{ item }}"' /opt/cribl/local/cribl/auth/users.json
+      loop: "{{ verify_users }}"
+      register: users_check
+      changed_when: false
