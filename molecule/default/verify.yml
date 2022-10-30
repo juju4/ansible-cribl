@@ -112,3 +112,5 @@
       loop: "{{ verify_users }}"
       register: users_check
       changed_when: false
+      when:
+        - not is_container|bool
