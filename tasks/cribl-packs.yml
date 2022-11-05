@@ -1,0 +1,17 @@
+---
+
+- name: Install cribl pack via API
+  ansible.builtin.uri:
+    url: "{{ cribl_api_base }}/packs"
+    method: POST
+    headers:
+      Accept: application/json
+      Authorization: "Bearer {{ token }}"
+    body_format: json
+    # "id": "{{ lookup('community.general.random_string', length=12) }}",
+    body:
+      {
+        "id": "{{ item }}",
+      }
+    return_content: yes
+  loop: "{{ cribl_packs }}"

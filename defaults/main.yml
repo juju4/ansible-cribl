@@ -41,10 +41,16 @@ cribl_users:
     roles: user
     passwd: jane1234
 
-# used for users creation
+# used for users creation and packs
 cribl_api_base: http://localhost:9000/api/v1
 cribl_api_user: admin
 cribl_api_password: admin
+
+cribl_packs:
+  - syslog-input
+  - windows-events
+  - knowledge-pack
+  - linux-events
 
 install_archives: /var/_install
 is_container: false

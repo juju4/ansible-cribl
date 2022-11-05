@@ -1,31 +1,5 @@
 ---
 
-- name: Get token
-  ansible.builtin.uri:
-    url: "{{ cribl_api_base }}/auth/login"
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    body_format: json
-    body:
-      {
-        "username": "{{ cribl_api_user }}",
-        "password": "{{ cribl_api_password }}",
-      }
-    return_content: yes
-  register: uri_token
-  failed_when: false
-
-- name: Get token - curl  # noaq command-instead-of-module
-  ansible.builtin.shell: |
-    set -o pipefail
-    curl -s {{ cribl_api_base }}/auth/login -H  "accept: application/json" -H  "Content-Type: application/json" -d '{ "username": "{{ cribl_api_user }}", "password": "{{ cribl_api_password }}" }' | jq -r .token
-  args:
-    executable: /bin/bash
-  register: uri_token
-  changed_when: false
-  failed_when: "'null' in uri_token.stdout"
-
 - name: Retrieve cribl users
   ansible.builtin.uri:
     url: "{{ cribl_api_base }}/system/users"
