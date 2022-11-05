@@ -99,6 +99,7 @@ jobs:
         run: |
           set -x
           sudo cat /opt/cribl/local/cribl/inputs.yml
+          sudo cat /opt/cribl/local/cribl/outputs.yml
           sudo cat /opt/cribl/local/cribl/pipelines/slicendice/conf.yml
           sudo cat /opt/cribl/local/cribl/auth/users.json
           sudo find /opt/cribl/default/ -type f ! -ipath '*/default/ui/*' ! -ipath '*/default/cribl/*'
