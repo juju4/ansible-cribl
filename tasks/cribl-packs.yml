@@ -21,7 +21,7 @@
   register: install_pack
   changed_when:
     - "'\"count\":1' in install_pack.content"
-    - "'Pack already exists' not in install_pack.json.message"
+    - "'Pack already exists' not in install_pack.json|string"
   failed_when:
     - install_pack.status != 200
-    - "'Pack already exists' not in install_pack.json.message"
+    - "'Pack already exists' not in install_pack.json|string"
