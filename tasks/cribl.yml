@@ -37,7 +37,7 @@
   ansible.builtin.template:
     src: "{{ cribl_outputs_template }}.j2"
     dest: "{{ cribl_home }}/local/cribl/outputs.yml"
-    mode: '0600'
+    mode: '0644'
     owner: "{{ cribl_user }}"
     backup: "{{ cribl_backup | default('no') }}"
   notify:
