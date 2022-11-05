@@ -8,10 +8,20 @@
       Accept: application/json
       Authorization: "Bearer {{ token }}"
     body_format: json
-    # "id": "{{ lookup('community.general.random_string', length=12) }}",
     body:
       {
         "id": "{{ item }}",
       }
     return_content: yes
+    status_code:
+      - 200
+      # includes below "Pack already exists"
+      - 500
   loop: "{{ cribl_packs }}"
+  register: install_pack
+  changed_when:
+    - "'\"count\":1' in install_pack.content"
+    - "'Pack already exists' not in install_pack.json.message"
+  failed_when:
+    - install_pack.status != 200
+    - "'Pack already exists' not in install_pack.json.message"
