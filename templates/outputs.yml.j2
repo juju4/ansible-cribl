@@ -1,0 +1,28 @@
+{{ ansible_managed | comment }}
+outputs:
+  # example localhost elasticsearch as default output
+  default:
+    defaultId: elasticlocal
+    type: default
+  elasticlocal:
+    systemFields:
+      - cribl_pipe
+    streamtags: []
+    loadBalanced: false
+    concurrency: 5
+    maxPayloadSizeKB: 4096
+    maxPayloadEvents: 0
+    compress: false
+    rejectUnauthorized: false
+    timeoutSec: 30
+    flushPeriodSec: 1
+    failedRequestLoggingMode: none
+    safeHeaders: []
+    auth:
+      disabled: true
+    elasticVersion: auto
+    onBackpressure: block
+    useRoundRobinDns: false
+    type: elastic
+    index: test_index
+    url: http://localhost:9400/_bulk

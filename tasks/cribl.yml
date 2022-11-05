@@ -33,6 +33,16 @@
   notify:
     - Restart Cribl
 
+- name: Configure outputs
+  ansible.builtin.template:
+    src: "{{ cribl_outputs_template }}.j2"
+    dest: "{{ cribl_home }}/local/cribl/outputs.yml"
+    mode: '0600'
+    owner: "{{ cribl_user }}"
+    backup: "{{ cribl_backup | default('no') }}"
+  notify:
+    - Restart Cribl
+
 - name: Ensure pipelines directories exists
   ansible.builtin.file:
     path: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}"

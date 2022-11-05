@@ -13,6 +13,7 @@ cribl_home: "/opt/cribl"
 cribl_web_proxy: ''
 
 cribl_inputs_template: inputs.yml
+cribl_outputs_template: outputs.yml
 cribl_pipelines_templates:
   - name: slicendice
     template: slicendice-conf.yml
