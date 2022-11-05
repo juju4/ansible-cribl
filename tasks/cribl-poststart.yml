@@ -32,6 +32,10 @@
 - name: Import cribl-users
   ansible.builtin.import_tasks: cribl-users.yml
 
+- name: Pause
+  ansible.builtin.pause:
+    seconds: 5
+
 - name: Import cribl-packs
   ansible.builtin.import_tasks: cribl-packs.yml
   vars:
