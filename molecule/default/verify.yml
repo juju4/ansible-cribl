@@ -94,7 +94,7 @@
     - name: Check no error/warning in log
       ansible.builtin.shell: |
         set -o pipefail
-        grep -riE 'error|warning' /opt/cribl/log/cribl.log | grep -v 'startup resource check - seems good, no warnings|,\"errors\":0'
+        grep -riE 'error|warning' /opt/cribl/log/cribl.log | grep -v 'startup resource check - seems good, no warnings|,\"errors\":0|Pack already exists'
       args:
         executable: /bin/bash
       register: log2
