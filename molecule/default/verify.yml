@@ -100,9 +100,41 @@
       register: log2
       changed_when: false
       failed_when: false
-    - name: Validate log1
+    - name: Validate log2
       ansible.builtin.assert:
         that: log2.rc != 0
+      when:
+        - not is_container|bool
+
+    - name: Check no error/warning in worker logs
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -riE 'error|warn' /opt/cribl/log/worker/*/cribl*.log | grep -v 'Premature close'
+      args:
+        executable: /bin/bash
+      register: log3
+      changed_when: false
+      failed_when: false
+    - name: Validate log3
+      ansible.builtin.assert:
+        that: log3.rc != 0
+      when:
+        - not is_container|bool
+
+    - name: Check no Premature close in worker logs
+      ansible.builtin.shell: |
+    - name: Check no Premature close in worker logs
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -rin "Premature close" /opt/cribl/log/worker/*/cribl*.log | tail
+      args:
+        executable: /bin/bash
+      register: log4
+      changed_when: false
+      failed_when: false
+    - name: Validate log4
+      ansible.builtin.assert:
+        that: log4.rc != 0
       when:
         - not is_container|bool
 
