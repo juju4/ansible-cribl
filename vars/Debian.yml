@@ -4,3 +4,4 @@ cribl_deps:
   - acl
   - git
   - jq
+  - curl
