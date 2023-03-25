@@ -43,6 +43,15 @@
   notify:
     - Restart Cribl
 
+- name: Debug | copy new output
+  ansible.builtin.copy:
+    src: "{{ cribl_home }}/local/cribl/outputs.yml"
+    dest: "{{ cribl_home }}/local/cribl/outputs.yml.new"
+    mode: '0644'
+    owner: "{{ cribl_user }}"
+    remote_src: true
+  when: false
+
 - name: Ensure pipelines directories exists
   ansible.builtin.file:
     path: "{{ cribl_home }}/local/cribl/pipelines/{{ item.name }}"
