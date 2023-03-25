@@ -19,10 +19,10 @@
   register: uri_token
   failed_when: false
 
-- name: Get API token - curl  # noaq command-instead-of-module
+- name: Get API token - curl  # noqa command-instead-of-module
   ansible.builtin.shell: |
     set -o pipefail
-    curl -s {{ cribl_api_base }}/auth/login -H  "accept: application/json" -H  "Content-Type: application/json" -d '{ "username": "{{ cribl_api_user }}", "password": "{{ cribl_api_password }}" }' | jq -r .token
+    curl -s {{ cribl_api_base }}/auth/login -H "accept: application/json" -H "Content-Type: application/json" -d '{ "username": "{{ cribl_api_user }}", "password": "{{ cribl_api_password }}" }' | jq -r .token
   args:
     executable: /bin/bash
   register: uri_token
