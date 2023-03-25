@@ -77,6 +77,26 @@ $ MOLECULE_DISTRO=ubuntu:20.04 molecule test --destroy=never
 
 * For cribl users, the creation works but not the initial password which has to be reset from Web UI.
 
+* Worker activity from logs
+```
+cat /opt/cribl/log/worker/*/cribl.log | jq -r 'select(.clientip == "w.x.y.z") | [.level, .url, .method, .status, .size]'
+```
+
+* Source logs "Premature close" errors
+```
+message:Dropping request due to error
+error:Premature close
+method:POST
+src: 127.0.0.1:<random>
+statusCode:500
+url:/_bulk
+```
+
+## Resources
+
+* [Common Errors and Warnings](https://docs.cribl.io/stream/common-errors)
+* [Bifurcating Observability Data To Multiple Destinations, Jan 2023](https://cribl.io/blog/bifurcating-observability-data-to-multiple-destinations/)
+
 ## License
 
 BSD 2-clause
