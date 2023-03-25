@@ -29,7 +29,7 @@ inputs:
           "cluster_uuid": "Js6_Z2VKS3KbfRSxPmPbaw",
           "version": {
 {# cribl server version MUST align with beat client version #}
-              "number": "8.4.3",
+              "number": "8.6.2",
               "build_type": "tar",
               "build_hash": "bca0c8d",
               "build_date": "2019-10-16T06:19:49.319352Z",
@@ -43,6 +43,17 @@ inputs:
     type: elastic
     port: 9200
     splunkHecAPI: ""
+{# Cribl internal #}
+  CriblLogs:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    type: cribl
+  CriblMetrics:
+    type: criblmetrics
+    disabled: false
+    pipeline: cribl_metrics_rollup
 {# raw http source #}
   testdisp:
     disabled: false
