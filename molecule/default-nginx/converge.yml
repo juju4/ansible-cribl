@@ -13,7 +13,7 @@
     cribl_fqdn: cribl.example.com
     hardenwebserver_disable_http: true
     hardenwebserver_cert: mkcert
-    hardenwebserver_https_template: nginx.conf.j2
+    hardenwebserver_https_template: ../../templates/nginx.conf.j2
     # hardenwebserver_header_csp: "default-src 'self'; script-src 'self' 'unsafe-inline' 'report-sample'; connect-src 'self'; img-src 'self'; style-src 'self' 'unsafe-inline' 'unsafe-eval'; font-src 'self' data:;base-uri 'none'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests; report-uri /csp/report.php;"
     hardenwebserver_header_csp: "upgrade-insecure-requests; report-uri /csp/report.php;"
     # hardenwebserver_ssl_cert: "/etc/letsencrypt/live/{{ cribl_fqdn }}/fullchain.pem"
