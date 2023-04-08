@@ -1,0 +1,148 @@
+---
+
+- name: Verify cribl setup
+  hosts: criblgroup
+  vars:
+    cribl_home: /opt/cribl
+    cribl_bin: "{{ cribl_home }}/bin/cribl"
+    config: "{{ cribl_home }}/local/cribl/inputs.yml"
+    ports:
+      # cribl default web ui
+      - { h: 0.0.0.0, p: 9000 }
+      # nginx
+      - { h: 0.0.0.0, p: 443 }
+    verify_users:
+      - john
+      - jane
+    url: https://localhost
+    is_container: false
+  pre_tasks:
+    - name: Debug | var ansible_virtualization_type
+      ansible.builtin.debug:
+        var: ansible_virtualization_type
+    - name: Set fact is_container
+      ansible.builtin.set_fact:
+        is_container: true
+      when: >
+        (ansible_virtualization_type is defined and
+          (ansible_virtualization_type == "docker"
+           or ansible_virtualization_type == "containerd"
+           or ansible_virtualization_type == "container"
+          )
+        )
+  tasks:
+
+    - name: Check cribl binary
+      ansible.builtin.stat:
+        path: "{{ cribl_bin }}"
+      register: bin1
+    - name: Validate cribl binary is present
+      ansible.builtin.assert:
+        that: bin1.stat.exists and bin1.stat.size != 0 and bin1.stat.mode == '0755'
+
+    - name: Check cribl inputs config file
+      ansible.builtin.stat:
+        path: "{{ config }}"
+      register: cfg1
+    - name: Validate cribl configuration files are present
+      ansible.builtin.assert:
+        that: cfg1.stat.exists and cfg1.stat.size != 0
+
+    - name: Ensure cribl process is running
+      ansible.builtin.command: pgrep -u _cribl cribl
+      register: ps1
+      changed_when: false
+      failed_when: false
+    - name: Validate ps output
+      ansible.builtin.assert:
+        that: ps1.stdout
+      when:
+        - not is_container|bool
+
+    - name: Ensure ports are listening
+      ansible.builtin.wait_for:
+        host: "{{ item.h }}"
+        port: "{{ item.p }}"
+        timeout: 10
+      with_items: "{{ ports }}"
+      when:
+        - not is_container|bool
+
+    - name: Fetch localhost endpoint
+      ansible.builtin.uri:
+        url: "{{ url }}"
+        validate_certs: no
+        return_content: yes
+      register: web
+      failed_when: false
+    - name: Validate localhost endpoint
+      ansible.builtin.assert:
+        that: >
+          "'<title>Cribl Stream</title>' in web.content"
+      when:
+        - not is_container|bool
+
+    - name: Check startup completed fine
+      ansible.builtin.command: grep "startup resource check - seems good, no warnings" /opt/cribl/log/cribl.log
+      register: log1
+      changed_when: false
+      failed_when: false
+    - name: Validate log1
+      ansible.builtin.assert:
+        that: log1.rc == 0
+      when:
+        - not is_container|bool
+
+    - name: Check no error/warning in log
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -riE 'error|warning' /opt/cribl/log/cribl.log | grep -v 'startup resource check - seems good, no warnings|,\"errors\":0|Pack already exists'
+      args:
+        executable: /bin/bash
+      register: log2
+      changed_when: false
+      failed_when: false
+    - name: Validate log2
+      ansible.builtin.assert:
+        that: log2.rc != 0
+      when:
+        - not is_container|bool
+
+    - name: Check no error/warning in worker logs
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -riE 'error|warn' /opt/cribl/log/worker/*/cribl*.log | grep -v 'Premature close'
+      args:
+        executable: /bin/bash
+      register: log3
+      changed_when: false
+      failed_when: false
+    - name: Validate log3
+      ansible.builtin.assert:
+        that: log3.rc != 0
+      when:
+        - not is_container|bool
+
+    - name: Check no Premature close in worker logs
+      ansible.builtin.shell: |
+        set -o pipefail
+        grep -rin "Premature close" /opt/cribl/log/worker/*/cribl*.log | tail
+      args:
+        executable: /bin/bash
+      register: log4
+      changed_when: false
+      failed_when: false
+    - name: Validate log4
+      ansible.builtin.assert:
+        that: log4.rc != 0
+      when:
+        - not is_container|bool
+
+    - name: Check users are present
+      ansible.builtin.command: >
+        grep '"username":"{{ item }}"' /opt/cribl/local/cribl/auth/users.json
+      loop: "{{ verify_users }}"
+      register: users_check
+      changed_when: false
+      when:
+        - not is_container|bool
