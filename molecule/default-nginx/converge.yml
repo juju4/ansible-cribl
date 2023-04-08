@@ -10,7 +10,8 @@
   vars:
     filebeat_output_elasticsearch_enabled: true
     filebeat_output_logstash_enabled: false
-    cribl_fqdn: cribl.example.com
+    # cribl_fqdn: cribl.example.com
+    cribl_fqdn: "{{ ansible_fqdn }}"
     hardenwebserver_disable_http: true
     hardenwebserver_cert: mkcert
     hardenwebserver_https_template: ../../templates/nginx.conf.j2
@@ -25,6 +26,7 @@
       - { p: "/var/log/nginx", perm: rwx, m: '0755' }
     hardenwebserver_systemd_files_acl:
       # - { p: "/etc/letsencrypt/live/{{ cribl_fqdn }}/privkey.pem", perm: r }
+      - { p: "/etc/ssl/private/{{ cribl_fqdn }}.key", perm: r }
       - { p: "/etc/ssl/private/dhparam4.pem", perm: r }
   pre_tasks:
     - name: Ubuntu | Install python3
