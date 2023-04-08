@@ -77,6 +77,15 @@ $ MOLECULE_DISTRO=ubuntu:20.04 molecule test --destroy=never
 
 * For cribl users, the creation works but not the initial password which has to be reset from Web UI.
 
+* You can test logs ingestion with local logs aka [File Monitor](https://docs.cribl.io/stream/sources-file-monitor) and logger command
+```
+logger "local logger test from `hostname -s`"
+```
+Ensure to provide read access to cribl user, for example with acl:
+```
+sudo setfacl -m u:_cribl:r /var/log/syslog
+```
+
 * Worker activity from logs
 ```
 cat /opt/cribl/log/worker/*/cribl.log | jq -r 'select(.clientip == "w.x.y.z") | [.level, .url, .method, .status, .size]'
@@ -91,6 +100,24 @@ src: 127.0.0.1:<random>
 statusCode:500
 url:/_bulk
 ```
+
+* Elasticsearch source
+  * No data ingestion. Check if not a beat-server version mismatch even if minor version, update+commit in cribl and restart cribl.
+On source beat log
+```
+Connection marked as failed because the onConnect callback failed: Elasticsearch is too old. Please upgrade the instance. If you would like to connect to older instances set output.elasticsearch.allow_older_versions to true. ES=8.4.3, Beat=8.6.2
+```
+  * Server returns HTTP 503 Service Unavailable error for Elasticsearch source
+```
+{"text":"Server is busy, max active connections reached","code":9}
+```
+
+* Test Raw HTTP with curl - NOK
+```
+curl -v -X POST http://localhost:10081 -d 'Test Raw HTTP from curl POST'
+```
+
+* Eventually use a local file destination to help troubleshooting. If using a Filesystem destination, this will be a directory with multiple json output files.
 
 ## Resources
 
