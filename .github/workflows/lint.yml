@@ -19,6 +19,8 @@ jobs:
       ANSIBLE_CALLBACKS_ENABLED: profile_tasks
       ANSIBLE_EXTRA_VARS: ""
       ANSIBLE_ROLE: juju4.cribl
+      # As using same lint for multiple scenarios, need the biggest requirements.yml suite
+      SUITE: default-nginx
 
     steps:
       - uses: actions/checkout@v3
@@ -40,7 +42,7 @@ jobs:
           echo "/opt/hostedtoolcache/Python/3.9.1/x64/bin" >> $GITHUB_PATH
           ansible --version
           cd $GITHUB_WORKSPACE/$ANSIBLE_ROLE
-          [ -f molecule/default/requirements.yml ] && ansible-galaxy install -r molecule/default/requirements.yml
+          [ -f molecule/${SUITE}/requirements.yml ] && ansible-galaxy install -r molecule/${SUITE}/requirements.yml
           { echo '[defaults]'; echo 'callbacks_enabled = profile_tasks, timer'; echo 'roles_path = ../:/home/runner/.ansible/roles'; echo 'ansible_python_interpreter: /usr/bin/python3'; } >> ansible.cfg
       - name: Fetch central settings repository
         run: |
