@@ -1,0 +1,6 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - juju4.cribl
+    - juju4.harden_nginx
