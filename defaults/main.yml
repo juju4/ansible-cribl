@@ -13,6 +13,9 @@ cribl_home: "/opt/cribl"
 cribl_web_proxy: ''
 
 cribl_inputs_template: inputs.yml
+cribl_in_elastic_version: 8.6.2
+cribl_in_elastic_tls: false
+cribl_in_elastic_cert_name: 'CERTNAME'
 cribl_outputs_template: outputs.yml
 cribl_pipelines_templates:
   - name: slicendice

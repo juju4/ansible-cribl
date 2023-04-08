@@ -8,7 +8,15 @@ inputs:
     streamtags: []
     host: 0.0.0.0
     tls:
+{% if cribl_in_elastic_tls|bool %}
+      disabled: false
+      requestCert: false
+      certificateName: {{ cribl_in_elastic_cert_name }}-cert
+      certPath: $CRIBL_HOME/local/cribl/auth/certs/{{ cribl_in_elastic_cert_name }}-cert.crt
+      privKeyPath: $CRIBL_HOME/local/cribl/auth/certs/{{ cribl_in_elastic_cert_name }}-cert.key
+{% else %}
       disabled: true
+{% endif %}
     maxActiveReq: 256
     enableProxyHeader: false
     captureHeaders: false
@@ -29,7 +37,7 @@ inputs:
           "cluster_uuid": "Js6_Z2VKS3KbfRSxPmPbaw",
           "version": {
 {# cribl server version MUST align with beat client version #}
-              "number": "8.6.2",
+              "number": "{{ cribl_in_elastic_version }}",
               "build_type": "tar",
               "build_hash": "bca0c8d",
               "build_date": "2019-10-16T06:19:49.319352Z",

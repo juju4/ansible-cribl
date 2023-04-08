@@ -1,0 +1,9 @@
+---
+{{ ansible_managed | comment }}
+# https://docs.cribl.io/stream/securing-communications
+# local/cribl/certificates.yml
+# data in
+# local/cribl/auth/certs/NAME-cert.crt
+# local/cribl/auth/certs/NAME-cert.key
+{{ cribl_in_elastic_cert_name }}-cert:
+  description: "Cert for {{ cribl_in_elastic_cert_name }}"
