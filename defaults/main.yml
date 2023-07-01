@@ -1,8 +1,8 @@
 ---
 
 cribl_from: 'url'
-cribl_url: 'https://cdn.cribl.io/dl/4.0.4/cribl-4.0.4-94fffce3-linux-x64.tgz'
-cribl_hash_url: 'https://cdn.cribl.io/dl/4.0.4/cribl-4.0.4-94fffce3-linux-x64.tgz.sha256'
+cribl_url: 'https://cdn.cribl.io/dl/4.1.3/cribl-4.1.3-15457782-linux-x64.tgz'
+cribl_hash_url: 'https://cdn.cribl.io/dl/4.1.3/cribl-4.1.3-15457782-linux-x64.tgz.sha256'
 # cribl_from: 'file'  # from orchestrator
 cribl_filepath: ''
 
@@ -13,7 +13,7 @@ cribl_home: "/opt/cribl"
 cribl_web_proxy: ''
 
 cribl_inputs_template: inputs.yml
-cribl_in_elastic_version: 8.6.2
+cribl_in_elastic_version: 8.7.1
 cribl_in_elastic_tls: false
 cribl_in_elastic_cert_name: 'CERTNAME'
 cribl_outputs_template: outputs.yml
