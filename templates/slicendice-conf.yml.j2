@@ -35,9 +35,14 @@ functions:
         - filter: __status == 200
           rate: 5
     description: Check for status 200 and sample 5:1
-  - id: mask
+  - id: comment
     filter: "true"
     disabled: null
+    conf:
+      comment: Example masking password=xyz
+  - id: mask
+    filter: "true"
+    disabled: true
     conf:
       rules:
         - matchRegex: /password=(.*?)/
@@ -46,4 +51,153 @@ functions:
         - _raw
       depth: 5
     description: Mask secret pattern
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Osquery processing
+  - id: json_unroll
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && log.file.path ==
+      '/var/log/osquery/osqueryd.results.log'
+    disabled: null
+    conf:
+      path: message
+    description: osqueryd
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Sysmonforlinux processing
+  - id: regex_extract
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && log.file.path ==
+      '/var/log/sysmon/sysmon.log'
+    disabled: null
+    conf:
+      source: message
+      iterations: 100
+      overwrite: false
+      regex: "/^.* sysmon: (?<sysmonxml>.*)/"
+    description: sysmonforlinux-xml
+  - id: eval
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && journald.process.name == 'sysmon'
+    disabled: null
+    conf:
+      add:
+        - name: sysmonxml
+          value: message
+  - id: eval
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/sysmon/sysmon.log' || journald.process.name == 'sysmon')
+    disabled: null
+    conf:
+      keep: []
+      remove:
+        - message
+      add:
+        - name: parsed
+          value: C.Text.parseXml(sysmonxml)
+  - id: flatten
+    filter: false && __inputId=='elastic:in_elastic' && agent.type == 'filebeat' &&
+      log.file.path == '/var/log/sysmon/sysmon.log'
+    disabled: null
+    conf:
+      fields:
+        - parsed.Event.EventData.Data
+      prefix: data
+      depth: 5
+      delimiter: _
+    description: sysmonforlinux-flatten
+  - id: code
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/sysmon/sysmon.log' || journald.process.name == 'sysmon')
+    disabled: null
+    conf:
+      maxNumOfIterations: 5000
+      code: |-
+        let ans = {}
+        for (const el of __e.parsed.Event.EventData.Data) {
+            __e[el.Name] = el._value
+        }
+    description: Transform sysmon EventData.Data into dictionary
+  - id: eval
+    filter: (__inputId=='elastic:in_elastic' || __inputId=='elastic:in_elastic9201')
+      && agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/sysmon/sysmon.log' || journald.process.name == 'sysmon')
+    disabled: null
+    conf:
+      add: []
+      remove:
+        - parsed
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Set index
+  - id: eval
+    filter: agent.type == 'winlogbeat' || agent.type == 'filebeat'
+    disabled: null
+    conf:
+      add:
+        - name: __index
+          value: "`so-beats-2023.04.01`"
+    description: "NOK? `so-beats-${C.Time.strftime(_time ? _time : Date.now() /
+      1000, '%Y.%m.%d')}`"
+  - id: comment
+    filter: "true"
+    disabled: null
+    conf:
+      comment: Set sourcetype
+  - id: eval
+    filter: agent.type == 'filebeat'
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'filebeat'"
+  - id: eval
+    filter: agent.type == 'filebeat' && log.file.path ==
+      '/var/log/osquery/osqueryd.results.log'
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'osquery'"
+  - id: eval
+    filter: agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/sysmon/sysmon.log' || journald.process.name == 'sysmon')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'sysmonforlinux'"
+  - id: eval
+    filter: agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/nginx/access.log' || log.file.path ==
+      '/var/log/nginx/access_json.log' || log.file.path ==
+      '/var/log/nginx/error.log')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'nginx'"
+  - id: eval
+    filter: agent.type == 'winlogbeat'
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'winlogbeat'"
+  - id: eval
+    filter: agent.type == 'winlogbeat' &&
+      winlog.provider_name=='Microsoft-Windows-Sysmon'
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'sysmon'"
 description: test
