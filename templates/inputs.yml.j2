@@ -51,6 +51,57 @@ inputs:
     type: elastic
     port: 9200
     splunkHecAPI: ""
+{# elastic API source - 2nd to help distribute queue load #}
+  in_elastic9201:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    host: 0.0.0.0
+    tls:
+{% if cribl_in_elastic_tls|bool %}
+      disabled: false
+      requestCert: false
+      certificateName: {{ cribl_in_elastic_cert_name }}-cert
+      certPath: $CRIBL_HOME/local/cribl/auth/certs/{{ cribl_in_elastic_cert_name }}-cert.crt
+      privKeyPath: $CRIBL_HOME/local/cribl/auth/certs/{{ cribl_in_elastic_cert_name }}-cert.key
+{% else %}
+      disabled: true
+{% endif %}
+    maxActiveReq: 256
+    enableProxyHeader: false
+    captureHeaders: false
+    activityLogSampleRate: 100
+    requestTimeout: 0
+    elasticAPI: /
+    authType: none
+    apiVersion: custom
+    extraHttpHeaders:
+      - name: X-elastic-product
+        value: Elasticsearch
+    proxyMode:
+      enabled: false
+    customAPIVersion: |-
+      {
+          "name": "AzU84iL",
+          "cluster_name": "cribl",
+          "cluster_uuid": "Js6_Z2VKS3KbfRSxPmPbaw",
+          "version": {
+{# cribl server version MUST align with beat client version #}
+              "number": "{{ cribl_in_elastic_version }}",
+              "build_type": "tar",
+              "build_hash": "bca0c8d",
+              "build_date": "2019-10-16T06:19:49.319352Z",
+              "build_snapshot": false,
+              "lucene_version": "9.7.2",
+              "minimum_wire_compatibility_version": "7.17.0",
+              "minimum_index_compatibility_version": "7.0.0"
+          },
+          "tagline": "You Know, for Search"
+      }
+    type: elastic
+    port: 9201
+    splunkHecAPI: ""
 {# Cribl internal #}
   CriblLogs:
     disabled: false
