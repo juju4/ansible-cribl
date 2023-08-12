@@ -56,5 +56,8 @@ cribl_packs:
   - knowledge-pack
   - linux-events
 
+cribl_local_directories:
+  - /var/log/cribl/json
+
 install_archives: /var/_install
 is_container: false

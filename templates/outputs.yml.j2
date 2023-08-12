@@ -2,8 +2,31 @@
 # cribl outputs
 outputs:
   default:
+    # defaultId: devnull
     defaultId: elasticlocal
     type: default
+  localfilesystem-json:
+    systemFields:
+      - cribl_pipe
+    streamtags: []
+    addIdToStagePath: true
+    removeEmptyDirs: true
+    partitionExpr: "`${C.Time.strftime(_time ? _time : Date.now() / 1000,
+      '%Y/%m/%d')}/${index ? index : 'no_index'}/${host ? host :
+      'no_host'}/${sourcetype ? sourcetype : 'no_sourcetype'}`"
+    format: json
+    baseFileName: "`CriblOut`"
+    fileNameSuffix: '`.${C.env["CRIBL_WORKER_ID"]}.${__format}${__compression ===
+      "gzip" ? ".gz" : ""}`'
+    maxFileSizeMB: 32
+    maxFileOpenTimeSec: 300
+    maxFileIdleTimeSec: 30
+    maxOpenFiles: 100
+    onBackpressure: block
+    compress: gzip
+    emptyDirCleanupSec: 300
+    type: filesystem
+    destPath: /var/log/cribl/json
   elasticlocal:
     systemFields:
       - cribl_pipe
