@@ -160,8 +160,9 @@ functions:
         - name: sourcetype
           value: "'filebeat'"
   - id: eval
-    filter: agent.type == 'filebeat' && log.file.path ==
-      '/var/log/osquery/osqueryd.results.log'
+    filter: agent.type == 'filebeat' && (log.file.path ==
+      '/var/log/osquery/osqueryd.results.log' || log.file.path ==
+      '/var/log/osquery/osqueryd.snapshots.log')
     disabled: null
     conf:
       add:
@@ -175,6 +176,13 @@ functions:
       add:
         - name: sourcetype
           value: "'sysmonforlinux'"
+  - id: eval
+    filter: agent.type == 'filebeat' && (syslog.identifier == 'audit')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'auditd'"
   - id: eval
     filter: agent.type == 'filebeat' && (log.file.path ==
       '/var/log/nginx/access.log' || log.file.path ==
