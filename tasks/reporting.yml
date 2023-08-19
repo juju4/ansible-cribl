@@ -1,0 +1,22 @@
+---
+
+- name: Ensure /usr/local/scripts exists
+  ansible.builtin.file:
+    dest: /usr/local/scripts
+    state: directory
+    mode: '0755'
+
+- name: Ensure reporting script exists
+  ansible.builtin.template:
+    src: "{{ cribl_reporting_template }}.j2"
+    dest: "/usr/local/scripts/{{ cribl_reporting_template | basename }}"
+    mode: '0755'
+
+- name: Creates a daily scheduled task for reporting
+  ansible.builtin.cron:
+    name: cribl_reporting
+    minute: "40"
+    hour: "23"
+    user: "{{ cribl_user }}"
+    job: "/usr/local/scripts/{{ cribl_reporting_template | basename }}"
+    cron_file: ansible_cribl_reporting

@@ -59,5 +59,10 @@ cribl_packs:
 cribl_local_directories:
   - /var/log/cribl/json
 
+cribl_reporting: true
+cribl_reporting_template: cribl_localjson_report.sh
+cribl_reporting_dest: /var/tmp
+cribl_logrotate_days: 30
+
 install_archives: /var/_install
 is_container: false

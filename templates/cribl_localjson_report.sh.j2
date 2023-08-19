@@ -1,0 +1,71 @@
+#!/bin/sh
+{{ ansible_managed | comment }}
+# cribl local json log report
+
+export export PATH=/usr/bin:/bin
+umask 077
+
+date=$(date +%Y%m%d)
+date_y=$(date +%Y)
+date_m=$(date +%m)
+date_d=$(date +%d)
+cribl_logs=/var/log/cribl/json
+
+# inline stdout redirection for sh
+# https://stackoverflow.com/questions/3173131/redirect-copy-of-stdout-to-log-file-from-within-bash-script-itself
+check_tee_output()
+{
+    # copy (append) stdout and stderr to log file if TEE is unset or true
+    if [ -z "${TEE}" ] || [ "${TEE}" = true ]; then
+	TEE=false $0 2>&1 | tee {{ cribl_reporting_dest }}/cribl-report-"${date}" >/dev/null
+        exit $?
+    fi
+}
+
+check_tee_output
+
+
+echo
+echo
+echo "      CRIBL LOCAL JSON DAILY REPORT ${date} for ${cribl_logs}"
+echo
+echo
+
+echo "Listing index, hosts, sourcetype"
+ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/
+ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/
+ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/
+echo
+echo
+
+echo "Filebeat"
+echo "** Input type"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .input.type | sort | uniq -c | sort -nr
+echo
+echo
+
+echo "** Top10 Journald process name"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .journald.process.name | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+echo "** Top10 Syslog identifier"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .syslog.identifier | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+echo "No sourcetype"
+echo "** error.message"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/no_sourcetype/CriblOut-* | jq -r 'select(.source=="cribl") | .error.message + " @@" + .host' | sort | uniq -c | sort -nr
+echo
+echo
+echo "** Top10 message"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/no_sourcetype/CriblOut-* | jq .message | sort | uniq -c | sort -nr | head -10
+echo
+echo
+echo "** Top10 _metric"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/no_sourcetype/CriblOut-* | jq ._metric | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+find {{ cribl_reporting_dest }} -name 'cribl-report-*' -mtime +{{ cribl_logrotate_days|int }} -exec rm {} \; 2>/dev/null

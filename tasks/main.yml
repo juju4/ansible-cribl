@@ -78,3 +78,7 @@
   ansible.builtin.import_tasks: cribl-poststart.yml
   when:
     - not is_container|bool
+
+- name: Import reporting
+  ansible.builtin.import_tasks: reporting.yml
+  when: cribl_reporting
