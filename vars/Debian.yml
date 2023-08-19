@@ -5,3 +5,4 @@ cribl_deps:
   - git
   - jq
   - curl
+  - cron
