@@ -32,6 +32,11 @@
   become: yes
   become_user: root
 
+- name: Remove conflicting dependencies
+  ansible.builtin.package:
+    name: "{{ cribl_conflict_deps | default([]) }}"
+    state: absent
+
 - name: Install dependencies
   ansible.builtin.package:
     name: "{{ cribl_deps }}"

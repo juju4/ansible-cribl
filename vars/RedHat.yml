@@ -1,5 +1,8 @@
 ---
 
+cribl_conflict_deps:
+  - curl-minimal
+
 cribl_deps:
   - acl
   - git
