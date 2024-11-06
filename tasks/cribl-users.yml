@@ -19,4 +19,6 @@
   when:
     - users.content is defined
     - "item.username not in users.content"
+    # [API] Creating users requires an enterprise license/plan
+    - cribl_license_dat | length > 0
   loop: "{{ cribl_users }}"
