@@ -5,7 +5,6 @@ galaxy_info:
   description: Setup cribl.io
   license: BSD
   min_ansible_version: '1.9'
-  standalone: true
   platforms:
     - name: EL
       versions:
