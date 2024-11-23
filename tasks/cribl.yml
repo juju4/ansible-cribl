@@ -83,7 +83,7 @@
       ansible.builtin.copy:
         src: "{{ cribl_license_dat }}"
         dest: "{{ cribl_home }}/local/cribl/auth/676f6174733432.dat"
-        mode: 0644
+        mode: '0644'
         backup: "{{ cribl_backup | default('no') }}"
       notify:
         - Restart Cribl
