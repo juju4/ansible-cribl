@@ -31,19 +31,20 @@ cribl_license_dat: ''
 # Example. To store in vault. Cribl will hash password on first read of users.json.
 # Leave default admin account as is
 # password must be 8 characters or more
-cribl_users:
-  - username: john
-    first: john
-    last: doe
-    email: john@example.com
-    roles: user
-    passwd: john1234
-  - username: jane
-    first: jane
-    last: doe
-    email: jane@example.com
-    roles: user
-    passwd: jane1234
+# 'Creating users requires an enterprise license/plan'
+cribl_users: []
+#  - username: john
+#    first: john
+#    last: doe
+#    email: john@example.com
+#    roles: user
+#    passwd: john1234
+#  - username: jane
+#    first: jane
+#    last: doe
+#    email: jane@example.com
+#    roles: user
+#    passwd: jane1234
 
 # used for users creation and packs
 cribl_api_base: http://localhost:9000/api/v1
