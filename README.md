@@ -119,6 +119,8 @@ curl -v -X POST http://localhost:10081 -d 'Test Raw HTTP from curl POST'
 
 * Eventually use a local file destination to help troubleshooting. If using a Filesystem destination, this will be a directory with multiple json output files.
 
+* cribl_api_password should be left as is on first run to match default password. After first admin login and password change, it should be updated to new one.
+
 ## Resources
 
 * [Common Errors and Warnings](https://docs.cribl.io/stream/common-errors)
