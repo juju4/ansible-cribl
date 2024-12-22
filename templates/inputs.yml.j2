@@ -138,3 +138,20 @@ inputs:
     connections:
       - output: default
     splunkHecAPI: ""
+{# local system journald which can also be remote destination #}
+  in_journal_local:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    interval: 10
+    journals:
+      - system
+      - remote
+    rules:
+      - filter: severity <= 4
+        description: Allow log messages having 'emergency', 'alert', 'critical',
+          'error', or 'warning' priority
+    currentBoot: false
+    path: /var/log/journal/$MACHINE_ID
+    type: journal_files

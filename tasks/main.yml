@@ -87,3 +87,14 @@
 - name: Import reporting
   ansible.builtin.import_tasks: reporting.yml
   when: cribl_reporting
+
+- name: Add symlinks to /etc and /var/log
+  ansible.builtin.file:
+    src: "{{ item.s }}"
+    dest: "{{ item.d }}"
+    state: link
+    mode: '0755'
+    owner: "{{ cribl_user }}"
+  loop:
+    - { s: /opt/cribl/log, d: /var/log/cribl }
+    - { s: /opt/cribl/local/cribl, d: /etc/cribl }

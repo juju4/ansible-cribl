@@ -11,6 +11,7 @@
     - "{{ cribl_home }}/local/cribl/auth"
     - "{{ cribl_home }}/local/cribl/pipelines"
     - "{{ cribl_local_directories }}"
+    - "{{ cribl_local_logsdir }}"
 
 - name: Unarchive Cribl
   ansible.builtin.unarchive:

@@ -184,6 +184,27 @@ functions:
         - name: sourcetype
           value: "'auditd'"
   - id: eval
+    filter: agent.type == 'filebeat' && (syslog.identifier == 'falco')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'falco'"
+  - id: eval
+    filter: agent.type == 'filebeat' && (syslog.identifier == 'kernel')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'kernel'"
+  - id: eval
+    filter: agent.type == 'filebeat' && (syslog.identifier == 'sshd')
+    disabled: null
+    conf:
+      add:
+        - name: sourcetype
+          value: "'sshd'"
+  - id: eval
     filter: agent.type == 'filebeat' && (log.file.path ==
       '/var/log/nginx/access.log' || log.file.path ==
       '/var/log/nginx/access_json.log' || log.file.path ==

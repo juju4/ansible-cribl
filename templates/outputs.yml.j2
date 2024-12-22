@@ -26,7 +26,7 @@ outputs:
     compress: gzip
     emptyDirCleanupSec: 300
     type: filesystem
-    destPath: /var/log/cribl/json
+    destPath: {{ cribl_local_logsdir }}
   elasticlocal:
     systemFields:
       - cribl_pipe

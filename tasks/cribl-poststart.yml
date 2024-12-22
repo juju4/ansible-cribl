@@ -18,6 +18,7 @@
     return_content: yes
   register: uri_token
   failed_when: false
+  no_log: "{{ cribl_no_log }}"
 
 - name: Get API token - curl  # noqa command-instead-of-module
   ansible.builtin.shell: |
@@ -28,6 +29,7 @@
   register: uri_token
   changed_when: false
   failed_when: "'null' in uri_token.stdout"
+  no_log: "{{ cribl_no_log }}"
 
 - name: Import cribl-users
   ansible.builtin.import_tasks: cribl-users.yml

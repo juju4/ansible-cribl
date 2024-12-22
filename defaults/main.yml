@@ -57,13 +57,15 @@ cribl_packs:
   - knowledge-pack
   - linux-events
 
-cribl_local_directories:
-  - /var/log/cribl/json
+cribl_local_logsdir: /var/local/cribl/json
+
+cribl_local_directories: []
 
 cribl_reporting: true
 cribl_reporting_template: cribl_localjson_report.sh
 cribl_reporting_dest: /var/tmp
 cribl_logrotate_days: 30
 
+cribl_no_log: true
 install_archives: /var/_install
 is_container: false
