@@ -1,8 +1,8 @@
 ---
 
 cribl_from: 'url'
-cribl_url: 'https://cdn.cribl.io/dl/4.9.2/cribl-4.9.2-f4fd0d71-linux-x64.tgz'
-cribl_hash_url: 'https://cdn.cribl.io/dl/4.9.2/cribl-4.9.2-f4fd0d71-linux-x64.tgz.sha256'
+cribl_url: 'https://cdn.cribl.io/dl/4.9.3/cribl-4.9.3-25d56bdd-linux-x64.tgz'
+cribl_hash_url: 'https://cdn.cribl.io/dl/4.9.3/cribl-4.9.3-25d56bdd-linux-x64.tgz.sha256'
 # cribl_from: 'file'  # from orchestrator
 cribl_filepath: ''
 
