@@ -9,7 +9,7 @@ date=$(date +%Y%m%d)
 date_y=$(date +%Y)
 date_m=$(date +%m)
 date_d=$(date +%d)
-cribl_logs=/var/log/cribl/json
+cribl_logs={{ cribl_local_logsdir }}
 
 # inline stdout redirection for sh
 # https://stackoverflow.com/questions/3173131/redirect-copy-of-stdout-to-log-file-from-within-bash-script-itself
@@ -31,14 +31,14 @@ echo "      CRIBL LOCAL JSON DAILY REPORT ${date} for ${cribl_logs}"
 echo
 echo
 
-echo "Listing index, hosts, sourcetype"
+echo "* Listing index, hosts, sourcetype"
 ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/
 ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/
 ls ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/
 echo
 echo
 
-echo "Filebeat"
+echo "* Filebeat"
 echo "** Input type"
 gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .input.type | sort | uniq -c | sort -nr
 echo
@@ -54,7 +54,22 @@ gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | 
 echo
 echo
 
-echo "No sourcetype"
+echo "** Top10 log file path"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .log.file.path | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+echo "** Top10 host"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .host | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+echo "** Top10 cribl_pipe"
+gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/filebeat/CriblOut-* | jq .cribl_pipe | sort | uniq -c | sort -nr | head -10
+echo
+echo
+
+echo "* No sourcetype"
 echo "** error.message"
 gunzip -c ${cribl_logs}/${date_y}/${date_m}/${date_d}/*/*/no_sourcetype/CriblOut-* | jq -r 'select(.source=="cribl") | .error.message + " @@" + .host' | sort | uniq -c | sort -nr
 echo
