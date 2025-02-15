@@ -1,7 +1,7 @@
 ---
 
 - name: Verify cribl setup
-  hosts: criblgroup
+  hosts: "{{ playbook_hosts | default('criblgroup') }}"
   vars:
     cribl_home: /opt/cribl
     cribl_bin: "{{ cribl_home }}/bin/cribl"
