@@ -108,6 +108,7 @@ jobs:
           sudo cat /opt/cribl/local/cribl/pipelines/slicendice/conf.yml
           sudo cat /opt/cribl/local/cribl/auth/users.json
           sudo find /opt/cribl/default/ -type f ! -ipath '*/default/ui/*' ! -ipath '*/default/cribl/*'
+          sudo -u _cribl /opt/cribl/bin/cribl status
         if: ${{ always() }}
         continue-on-error: true
       - name: After script - filebeat logs
