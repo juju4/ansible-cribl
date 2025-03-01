@@ -18,10 +18,16 @@ inputs:
       disabled: true
 {% endif %}
     maxActiveReq: 256
+    maxRequestsPerSocket: 0
     enableProxyHeader: false
     captureHeaders: false
     activityLogSampleRate: 100
     requestTimeout: 0
+    socketTimeout: 0
+    keepAliveTimeout: 5
+    enableHealthCheck: false
+    ipAllowlistRegex: /.*/
+    ipDenylistRegex: /^$/
     elasticAPI: /
     authType: none
     apiVersion: custom
@@ -69,10 +75,16 @@ inputs:
       disabled: true
 {% endif %}
     maxActiveReq: 256
+    maxRequestsPerSocket: 0
     enableProxyHeader: false
     captureHeaders: false
     activityLogSampleRate: 100
     requestTimeout: 0
+    socketTimeout: 0
+    keepAliveTimeout: 5
+    enableHealthCheck: false
+    ipAllowlistRegex: /.*/
+    ipDenylistRegex: /^$/
     elasticAPI: /
     authType: none
     apiVersion: custom
