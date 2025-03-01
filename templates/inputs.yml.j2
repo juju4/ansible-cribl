@@ -167,3 +167,33 @@ inputs:
     currentBoot: false
     path: /var/log/journal/$MACHINE_ID
     type: journal_files
+{% if cribl_in_otel|bool %}
+  in_otel:
+    disabled: false
+    sendToRoutes: true
+    pqEnabled: false
+    streamtags: []
+    host: 0.0.0.0
+    # 4317/grpc, 4318/http
+    port: 4318
+    tls:
+      disabled: true
+      requestCert: false
+    maxActiveReq: 256
+    maxRequestsPerSocket: 0
+    requestTimeout: 0
+    socketTimeout: 0
+    keepAliveTimeout: 15
+    enableHealthCheck: false
+    ipAllowlistRegex: /.*/
+    ipDenylistRegex: /^$/
+    protocol: http
+    extractSpans: true
+    extractMetrics: true
+    otlpVersion: 1.3.1
+    authType: none
+    maxActiveCxn: 1000
+    extractLogs: true
+    maxActiveCxn: 1000
+    type: open_telemetry
+{% endif %}
