@@ -4,4 +4,6 @@ collections:
   - name: ansible.posix
 
 roles:
-  - name: geerlingguy.filebeat
+  - src: https://github.com/juju4/ansible-role-filebeat/
+    version: master
+    name: geerlingguy.filebeat
