@@ -75,7 +75,9 @@
     - Restart Cribl
 
 - name: Cribl license file
-  when: cribl_license_dat|string
+  when:
+    - cribl_license_dat is defined
+    - cribl_license_dat | length > 0
   block:
     - name: Stat license file
       ansible.builtin.stat:
