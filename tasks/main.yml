@@ -46,6 +46,7 @@
     name: "{{ cribl_conflict_deps | default([]) }}"
     state: absent
   when:
+    - cribl_conflict_deps is defined
     - cribl_conflict_deps | length > 0
 
 - name: Install dependencies
