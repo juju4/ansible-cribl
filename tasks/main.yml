@@ -36,6 +36,8 @@
   ansible.builtin.package:
     name: "{{ cribl_conflict_deps | default([]) }}"
     state: absent
+  when:
+    - cribl_conflict_deps | length > 0
 
 - name: Install dependencies
   ansible.builtin.package:
