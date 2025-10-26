@@ -1,6 +1,7 @@
 ---
 
-cribl_conflict_deps: []
+cribl_conflict_deps:
+  - curl-minimal
 
 cribl_deps:
   - acl
