@@ -5,27 +5,27 @@
   vars:
     params:
       files:
-        - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
-        - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-        - '{{ ansible_distribution }}.yml'
-        - "{{ ansible_os_family }}-{{ ansible_distribution_major_version }}.yml"
-        - '{{ ansible_os_family }}.yml'
+        - "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+        - "{{ ansible_facts['distribution'] }}.yml"
+        - "{{ ansible_facts['os_family'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+        - "{{ ansible_facts['os_family'] }}.yml"
       paths:
         - 'vars'
 
-- name: Debug | ansible_virtualization_type
+- name: Debug | ansible_facts['virtualization_type']
   ansible.builtin.debug:
-    var: ansible_virtualization_type
+    var: ansible_facts['virtualization_type']
     verbosity: 1
 
 - name: Set fact is_container
   ansible.builtin.set_fact:
     is_container: true
   when: >
-    (ansible_virtualization_type is defined and
-      (ansible_virtualization_type == "docker"
-       or ansible_virtualization_type == "containerd"
-       or ansible_virtualization_type == "container"
+    (ansible_facts['virtualization_type'] is defined and
+      (ansible_facts['virtualization_type'] == "docker"
+       or ansible_facts['virtualization_type'] == "containerd"
+       or ansible_facts['virtualization_type'] == "container"
       )
     )
 
