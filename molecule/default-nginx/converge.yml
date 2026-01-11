@@ -8,6 +8,7 @@
     no_proxy: "{{ lookup('env', 'no_proxy') }}"
   remote_user: root
   vars:
+    filebeat_version: '9.x'
     filebeat_output_elasticsearch_enabled: true
     filebeat_output_logstash_enabled: false
     # cribl_fqdn: cribl.example.com
