@@ -37,5 +37,4 @@
         cache_valid_time: 3600
       when: ansible_facts['os_family'] == 'Debian'
   roles:
-    - { role: geerlingguy.filebeat, when: ansible_facts.os_family == 'Debian' }
     - juju4.cribl

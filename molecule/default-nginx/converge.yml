@@ -59,6 +59,5 @@
         # 'name cannot be longer than 64 characters on systemd servers, try a shorter name' vs long hostname
         name: "{{ cribl_fqdn | split('.') | first }}"
   roles:
-    - { role: geerlingguy.filebeat, when: ansible_facts.os_family == 'Debian' }
     - juju4.cribl
     - juju4.harden_nginx
