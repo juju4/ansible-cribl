@@ -29,6 +29,8 @@
       # - { p: "/etc/letsencrypt/live/{{ cribl_fqdn }}/privkey.pem", perm: r }
       - { p: "/etc/ssl/private/{{ cribl_fqdn }}.key", perm: r }
       - { p: "/etc/ssl/private/dhparam4.pem", perm: r }
+      - { p: "/var/log/nginx/cribl.access.log", perm: rw, o: www-data, m: '0644' }
+      - { p: "/var/log/nginx/cribl.error.log", perm: rw, o: www-data, m: '0644' }
   pre_tasks:
     - name: Ubuntu | Install python3
       ansible.builtin.raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal)
