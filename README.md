@@ -1,7 +1,7 @@
-[![Actions Status - Master](https://github.com/juju4/ansible-cribl/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-cribl/actions?query=branch%3Amaster)
-[![Actions Status - Devel](https://github.com/juju4/ansible-cribl/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-cribl/actions?query=branch%3Adevel)
-
 # cribl ansible role
+
+[![Actions Status - Main](https://github.com/juju4/ansible-cribl/workflows/AnsibleCI/badge.svg)](https://github.com/juju4/ansible-cribl/actions?query=branch%3Amain)
+[![Actions Status - Devel](https://github.com/juju4/ansible-cribl/workflows/AnsibleCI/badge.svg?branch=devel)](https://github.com/juju4/ansible-cribl/actions?query=branch%3Adevel)
 
 A simple ansible role to setup cribl.
 * https://cribl.io/download/
