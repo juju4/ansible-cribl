@@ -98,6 +98,9 @@
   ansible.builtin.lineinfile:
     path: "{{ cribl_home }}/.gitignore"
     line: "{{ item }}"
+    mode: '0600'
+    owner: "{{ cribl_user }}"
+    create: true
   loop:
     # ansible backup files
     - '*.*-*-*@*:*:*~'
