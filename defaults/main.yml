@@ -29,6 +29,12 @@ cribl_pipelines_templates:
 cribl_license_dat: ''
 # cribl_license_dat: /opt/cribl/local/cribl/auth/676f6174733432.dat
 
+cribl_git_packs:
+  - { repo: 'https://github.com/criblpacks/cribl-syslog-input' }
+  - { repo: 'https://github.com/criblpacks/cribl-windows-events' }
+  - { repo: 'https://github.com/criblpacks/cribl-knowledge-pack' }
+  - { repo: 'https://github.com/criblpacks/cribl-linux-events' }
+
 # Example. To store in vault. Cribl will hash password on first read of users.json.
 # Leave default admin account as is
 # password must be 8 characters or more

@@ -92,3 +92,17 @@
       notify:
         - Restart Cribl
       when: not lic.stat.exists
+
+# https://docs.cribl.io/stream/version-control/
+- name: Configure Cribl gitignore
+  ansible.builtin.lineinfile:
+    path: "{{ cribl_home }}/.gitignore"
+    line: "{{ item }}"
+  loop:
+    # ansible backup files
+    - '*.*-*-*@*:*:*~'
+  notify:
+    - Restart Cribl
+
+- name: Import cribl-packs
+  ansible.builtin.import_tasks: cribl-packs.yml
