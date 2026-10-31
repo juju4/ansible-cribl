@@ -106,6 +106,3 @@
     - '*.*-*-*@*:*:*~'
   notify:
     - Restart Cribl
-
-- name: Import cribl-packs
-  ansible.builtin.import_tasks: cribl-packs.yml
